@@ -52,6 +52,10 @@ jobs:
         
       - name: test
         run: cd backend && npm test
-
-
+  build:
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: build project
+        run: echo "build"
         

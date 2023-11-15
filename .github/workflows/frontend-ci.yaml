@@ -7,9 +7,8 @@ on:
     branches:
       - main
     paths:
-      - '~/starter/frontend/'
+      - starter/frontend/**
   
-
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -20,9 +19,6 @@ jobs:
       # Set up a Node.js environment using the specified node version.
       - name: Set up Node.js 
         uses: actions/setup-node@v3
-        with:
-          cache: 'npm'
-
       - name: Restore Cache
         uses: actions/cache@v3
         with:
@@ -46,13 +42,22 @@ jobs:
         with:
           cache: 'npm'
       # 
-      - name: Restore Cache
-        uses: actions/cache@v3
+      - uses: actions/cache@v3
+        name: Cache ~/.stack
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-      # Install the dependencies.
-      # - run: 
+          path: ~/.stack
+          key: ${{ runner.os }}-stack-global-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-stack-global-
+
+      - uses: actions/cache@v3
+        name: Cache .stack-work
+        with:
+          path: .stack-work
+          key: ${{ runner.os }}-stack-work-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}-${{ hashFiles('**/*.hs') }}
+          restore-keys: |
+            ${{ runner.os }}-stack-work-
+
       # Run the tests.
       # Install the dependencies.
       - name: dependencies

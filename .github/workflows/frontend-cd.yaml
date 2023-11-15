@@ -7,7 +7,7 @@ on:
     branches:
       - main
     paths:
-      - '**.js'
+      - 'starter/frontend/'
 jobs:
   lint:
     runs-on: ubuntu-latest
